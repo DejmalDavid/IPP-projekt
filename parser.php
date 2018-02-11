@@ -25,8 +25,15 @@ if( $argv[1] == "--help")
             $char=fgetc($STDIN);
             while ($char != 'q')
             {
+                if(($char == " ") || ($char == "\t"))
+                {
+                    while(($char == " ") || ($char == "\t"))
+                    {
+                      $char=fgetc($STDIN); 
+                    }
+                }
                 $token="";
-                while(($char != PHP_EOL)&& ($char!=' '))
+                while(($char != PHP_EOL) && ($char!=' '))
                 { 
                     $token=$token.$char;
                     $char=fgetc($STDIN);
@@ -35,12 +42,14 @@ if( $argv[1] == "--help")
             }
             return "KONEC";
         }
-        
-    $slovo= Get_token();
-    print($slovo);
-    print("\n");
-    $slovo2= Get_token();
-    print($slovo2);
+        for(  $i=0 ; $i< 4 ; $i++)
+        {
+            $slovo = Get_token();
+            print($slovo);
+            print ("\n");
+        }
+ 
+    
         
        
 

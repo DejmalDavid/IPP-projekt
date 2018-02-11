@@ -1,3 +1,3 @@
-aaahoj ja jsem vstup
-a mam dva radky
+add jedna dva
+sub tri ctzri
 q

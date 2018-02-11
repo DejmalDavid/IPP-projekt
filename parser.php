@@ -4,7 +4,9 @@
 $param_help_text="Ahoj jsem paramtert help!"; //TODO
 // TODO exit nebo return ???
 
-
+$STDIN = fopen("input.txt", "r");
+$a=5;
+/*
 if( $argv[1] == "--help")
 {
 	if($argc == 2)
@@ -16,16 +18,35 @@ if( $argv[1] == "--help")
 	{
 		exit (10); 	
 	}
-}
-	$token="";
-	print("ctu");
-	$char=fgetc(STDIN);
-	while(($char!=PHP_EOL) || ($char!=' '));
-	{
-		$token=$token+$char;
-		$char=fgetc(STDIN);	
-	}
-	print($token);
+}*/
+ function Get_token()
+        {
+            global $STDIN;
+            $char=fgetc($STDIN);
+            while ($char != 'q')
+            {
+                $token="";
+                while(($char != PHP_EOL)&& ($char!=' '))
+                { 
+                    $token=$token.$char;
+                    $char=fgetc($STDIN);
+                }
+                return $token;
+            }
+            return "KONEC";
+        }
+        
+    $slovo= Get_token();
+    print($slovo);
+    print("\n");
+    $slovo2= Get_token();
+    print($slovo2);
+        
+       
+
+
+
+
 	exit(0);
 ?>
 

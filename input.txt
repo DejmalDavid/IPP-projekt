@@ -1,4 +1,6 @@
-add jedna dva
+a  
 
-sub tri ctzri
+dd       	   jedna    dva  #koment  
+#celz	 radek koment 		  
+sub tri 	ctzri
 q

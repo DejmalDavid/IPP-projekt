@@ -5,7 +5,13 @@ $param_help_text="Ahoj jsem paramtert help!"; //TODO
 // TODO exit nebo return ???
 
 $STDIN = fopen("input.txt", "r");
-$a=5;
+$citac_poradi=0;
+
+class Tokeny{
+    public $text;
+    public $poradi;
+}
+
 /*
 if( $argv[1] == "--help")
 {
@@ -19,55 +25,89 @@ if( $argv[1] == "--help")
 		exit (10); 	
 	}
 }*/
+
+
+
+
  function Get_token()
         {
-            global $STDIN;
-            $char=fgetc($STDIN);
-            while ($char != 'q')
+            global $STDIN,$citac_poradi;
+            $znak=fgetc($STDIN);
+            $char=ord($znak);
+            while ($znak !== FALSE)
             {
-                if(($char == " ") || ($char == "\t") || ($char == '\n'))
+                if(($char == 10) || ($char == 9) || ($char == 32)|| ($char == 13))
                 {
-                    while(($char == " ") || ($char == "\t") || ($char == '\n'))
+                    while(($char == 10) || ($char == 9) || ($char == 32)|| ($char == 13))
                     {
-                      $char=fgetc($STDIN); 
+                        $znak=fgetc($STDIN);
+                        $char=ord($znak);
+                        //printf("ASCII:%d \n",$char);
+                        if(($char == 10)|| ($char == 13)) 
+                        {
+                           $citac_poradi=0;
+                        }
                     }
                 }
-                if( $char == '#')
+                while( $char == 35)
                 {
-                    while($char != 't')
+                    while(($char != 10))
                     {
                        // print ($char);
-                        $char=fgetc($STDIN); 
+                        $znak=fgetc($STDIN);
+                        $char=ord($znak);
                     }
-                     $char=fgetc($STDIN);
+                    if($char == 13)
+                    {
+                       $znak=fgetc($STDIN); 
+                    }
+                    $znak=fgetc($STDIN);
+                    $char=ord($znak);
+                    $citac_poradi=0;
                 }
                 $token="";
-                while(($char != '5') && ($char!=' '))
+                while(($char != 10) && ($char!=32) && ($char != 13) && ($znak !== FALSE))
                 { 
-                    $token=$token.$char;
-                    $char=fgetc($STDIN);
+                   // printf("ASCII:%d \n",$char);
+                    $token=$token.$znak;
+                    $znak=fgetc($STDIN);
+                    $char=ord($znak); 
                 }
+                
+                if(($char == 10)|| ($char == 13)) 
+                {
+                   $citac_poradi=0;
+                }
+                
                 return $token;
             }
             return "KONEC";
         }
-        
-        
-        
-        for(  $i=0 ; $i< 4 ; $i++)
-        {
-            $slovo = Get_token();
-            print($slovo);
-            print ("\n");
-        }
- 
+  
     
+        for(  $i=0 ; $i< 12; $i++)
+        {
+            $slovo = new Tokeny();
+            $slovo->text = Get_token();
+            $slovo->poradi = $citac_poradi;
+            $citac_poradi++;
+   
+
+            printf("%s p:%d\n",$slovo->text,$slovo->poradi);       
+        }
         
-       
-
-
-
-
+        //TODO pokayde volat ord($char) a podminka konce je FALSE === $char
+        /*
+    $char=fgetc($STDIN);
+    printf("CODE : %d",$char);
+    if($char == 13)
+    {
+        print("enter");
+    }
+    print("\n");
+    $char=ord($char);
+    print($char);
+        */
 	exit(0);
 ?>
 

@@ -1,6 +1,11 @@
 a  
 
 dd       	   jedna    dva  #koment  
-#celz	 radek koment 		  
+            
+#celz	 radek koment
+      
+ 		  
 sub tri 	ctzri
 q
+
+

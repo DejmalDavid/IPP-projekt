@@ -5,7 +5,7 @@ $param_help_text="Ahoj jsem paramtert help!"; //TODO
 // TODO exit nebo return ???
 
 //Globalni promene 
-$STDIN = fopen("input2.txt", "r");
+$STDIN = fopen("input3 - kopie", "r");
 $citac_poradi=0;
 $nuluj_citac=FALSE;
 
@@ -33,65 +33,65 @@ elseif ($argc > 2) {
 // Vraci string tokenu a nastavuje globalni promenou citac_poradi
  function Get_token()
         {
-            global $STDIN,$citac_poradi,$nuluj_citac;
-            $znak=fgetc($STDIN);
+            global $STDIN,$citac_poradi,$nuluj_citac;   //global promene
+            $znak=fgetc($STDIN);    
             $char=ord($znak);
-            while ($znak !== FALSE)
+            while ($znak !== FALSE)     //konec souboru
             {
-                if(($char == 10) || ($char == 9) || ($char == 32)|| ($char == 13))
+                if(($char <= 32))   // bile znaky
                 {
-                    while(($char == 10) || ($char == 9) || ($char == 32)|| ($char == 13))
+                    while(($char <= 32) && ($znak !== FALSE) )      //precte vsechny bile znaky
                     {
                         $znak=fgetc($STDIN);
                         $char=ord($znak);
-                        //printf("ASCII:%d \n",$char);
-                        if(($char == 10)|| ($char == 13)) 
+                       // printf("ASCII:%d \n",$char);  //help vypis
+                        if(($char == 10)|| ($char == 13))   // byl tam EOL dalsi token bude prvni
                         {
                            $citac_poradi=0;
                         }
                     }
+                    continue;   //vse se otestuje znova
                 }
-                while( $char == 35)
+                if( $char == 35)        // # kometar
                 {
-                    while(($char != 10))
+                    while(($char != 10) && ($znak !== FALSE))   // precte do konce radku
                     {
-                       // print ($char);
+                        
                         $znak=fgetc($STDIN);
                         $char=ord($znak);
+                       // printf ("%d;",$char);     //help vypis
                     }
-                    if($char == 13)
-                    {
-                       $znak=fgetc($STDIN); 
-                    }
-                    $znak=fgetc($STDIN);
+                    $znak=fgetc($STDIN);    // nacte prvni znak na novem radku
                     $char=ord($znak);
-                    $citac_poradi=0;
+                   // printf (" tady %d;",$char);       //help vypis
+                    $citac_poradi=0;    // novy radek - token bude prvni
+                    continue;   // testuj znova
                 }
                 $token="";
-                while(($char != 10) && ($char!=32) && ($char != 13) && ($znak !== FALSE))
+                while(($char >= 33) && ($char<= 126) && ($znak !== FALSE))  // nalezen tiknutelny znak
                 { 
-                   // printf("ASCII:%d \n",$char);
-                    $token=$token.$znak;
+                    $token=$token.$znak;    //konkaterace
                     $znak=fgetc($STDIN);
                     $char=ord($znak); 
+                    //printf("ASCII:%d \n",$char);       //help vypis
                 }
-                if($nuluj_citac== TRUE)
+                if($nuluj_citac== TRUE) // predchozi token snedl EOL, vynulovat citac
                 {
                     $nuluj_citac=FAlSE;
                     $citac_poradi=0;
                 }
-                if(($char == 10)|| ($char == 13)) 
+                if(($char == 10)|| ($char== 13))    // snedli jsme EOL pro dalsi token
                 {
                    $nuluj_citac=TRUE;
                 }
                 $citac_poradi++;
                 return $token;
             }
-            return "KONEC";
+            return "#KONEC";        //konec souboru, token nemuze obsahovat #
         }
   
     
-       for(  $i=0 ; $i< 50; $i++)
+       for(  $i=0 ; $i< 10; $i++)
         {
             $slovo = new Tokeny();
             $slovo->text = Get_token();

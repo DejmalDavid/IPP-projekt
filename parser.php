@@ -5,9 +5,19 @@ $param_help_text="Ahoj jsem paramtert help!"; //TODO
 // TODO exit nebo return ???
 
 //Globalni promene 
-$STDIN = fopen("input3 - kopie", "r");
+$STDIN = fopen("input2.txt", "r");  //TODO
 $citac_poradi=0;
 $nuluj_citac=FALSE;
+
+$gram_nic = array("createframe","pushframe","popframe","return","break");
+$gram_var = array("defvar","pops");
+$gram_label = array("call","label","jump");
+$gram_symbol = array("pushs","write","dprint");
+$gram_var_sym_sym = array("add","sub","mul","idiv","lt","gt","eq","and","and","or","not","stri2int","concat","getchar","setchar");
+$gram_var_symbol = array("int2char","strlen","type","move");
+$gram_var_type = array("read");
+$gram_label_sym_sym = array("jumpifeq","jumpifneq");
+
 
 //simulace struktury tokeny
 class Tokeny{
@@ -25,12 +35,236 @@ if($argc == 2)
 	}
 }
 elseif ($argc > 2) {
-    exit(42);
+    exit(21);   //TODO
+}
+
+$IPPCODE_hlavicka= new Tokeny();
+$IPPCODE_hlavicka->text = Get_token(); 
+$IPPCODE_hlavicka->poradi= $citac_poradi;
+if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
+{
+    $token = new Tokeny();  //nactu token
+    $token->text = Get_token();
+    $token->poradi= $citac_poradi;
+    $lower = strtolower($token->text);
+    while ($token->text != "#KONEC")    //smycka pro precteni celho vstupu
+    {
+        if(in_array($lower, $gram_nic)) //Instrukce bey parametru
+        {
+            printf("nasel sem:%s\n",$token->text);    //TODO
+            if($token->poradi != 1)     //musi byt prvni
+            {
+                print("Instukce neni prvni");   //TODO
+                exit(21);
+            }
+            //TODO generovani XML
+        }
+
+        if(in_array($lower, $gram_var))
+        {
+            printf("nasel sem:%s\n",$token->text);    //TODO
+            if($token->poradi != 1)     //musi byt prvni
+            {
+                print("Instukce neni prvni");   //TODO
+                exit(21);
+            }
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 2)
+             {
+                print("var neni druhy");   //TODO
+                exit(21); 
+             }
+             //TODO validace var
+             //TODO genere XML
+        }
+        
+        if(in_array($lower, $gram_label))
+        {
+            printf("nasel sem:%s\n",$token->text);    //TODO
+            if($token->poradi != 1)     //musi byt prvni
+            {
+                print("Instukce neni prvni");   //TODO
+                exit(21);
+            }
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 2)
+             {
+                print("label neni druhy");   //TODO
+                exit(21); 
+             }
+             //TODO validace label
+             //TODO genere XML
+        }
+        
+        if(in_array($lower, $gram_symbol))
+        {
+            printf("nasel sem:%s\n",$token->text);    //TODO
+            if($token->poradi != 1)     //musi byt prvni
+            {
+                print("Instukce neni prvni");   //TODO
+                exit(21);
+            }
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 2)
+             {
+                print("symbol neni druhy");   //TODO
+                exit(21); 
+             }
+             //TODO validace symbol
+             //TODO genere XML
+        }
+        
+        
+        if(in_array($lower, $gram_var_symbol))
+        {
+            printf("nasel sem:%s\n",$token->text);    //TODO
+            if($token->poradi != 1)     //musi byt prvni
+            {
+                print("Instukce neni prvni");   //TODO
+                exit(21);
+            }
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 2)
+             {
+                print("var neni druhy");   //TODO
+                exit(21); 
+             }
+             //TODO validace var
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 3)
+             {
+                print("symbol neni treti");   //TODO
+                exit(21); 
+             }
+             //TODO validace symbol
+             //TODO genere XML
+        }
+        
+        if(in_array($lower, $gram_var_type))
+        {
+            printf("nasel sem:%s\n",$token->text);    //TODO
+            if($token->poradi != 1)     //musi byt prvni
+            {
+                print("Instukce neni prvni");   //TODO
+                exit(21);
+            }
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 2)
+             {
+                print("var neni druhy");   //TODO
+                exit(21); 
+             }
+             //TODO validace var
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 3)
+             {
+                print("type neni treti");   //TODO
+                exit(21); 
+             }
+             //TODO validace type
+             //TODO genere XML
+        }
+        
+        if(in_array($lower, $gram_var_sym_sym))
+        {
+            printf("nasel sem:%s\n",$token->text);    //TODO
+            if($token->poradi != 1)     //musi byt prvni
+            {
+                print("Instukce neni prvni");   //TODO
+                exit(21);
+            }
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 2)
+             {
+                print("var neni druhy");   //TODO
+                exit(21); 
+             }
+             //TODO validace var
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 3)
+             {
+                print("symbol neni treti");   //TODO
+                exit(21); 
+             }
+             //TODO validace symbol
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 4)
+             {
+                print("symbol neni ctvrty");   //TODO
+                exit(21); 
+             }
+             //TODO validace symbol
+             //TODO genere XML
+        }
+        
+        if(in_array($lower, $gram_label_sym_sym))
+        {
+            printf("nasel sem:%s\n\n",$token->text);    //TODO
+            if($token->poradi != 1)     //musi byt prvni
+            {
+                print("Instukce neni prvni");   //TODO
+                exit(21);
+            }
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 2)
+             {
+                print("label neni druhy");   //TODO
+                exit(21); 
+             }
+             //TODO validace label
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 3)
+             {
+                print("symbol neni treti");   //TODO
+                exit(21); 
+             }
+             //TODO validace symbol
+             $token->text = Get_token();
+             $token->poradi= $citac_poradi;
+             if($token->poradi != 4)
+             {
+                print("symbol neni ctvrty");   //TODO
+                exit(21); 
+             }
+             //TODO validace symbol
+             //TODO genere XML
+        }
+
+
+
+
+       $token->text = Get_token(); //nakonec nacte dalsi token
+       $token->poradi= $citac_poradi;
+       $lower = strtolower($token->text);
+    }
+    exit(0);
+}
+else
+{
+    print("NENASEL hlavicku");  //TODO
+    exit(21);   //TODO prvni token musi byt hlavicka
 }
 
 
 
-// Vraci string tokenu a nastavuje globalni promenou citac_poradi
+  
+
+ 
+	
+        
+        // Vraci string tokenu a nastavuje globalni promenou citac_poradi
  function Get_token()
         {
             global $STDIN,$citac_poradi,$nuluj_citac;   //global promene
@@ -89,8 +323,9 @@ elseif ($argc > 2) {
             }
             return "#KONEC";        //konec souboru, token nemuze obsahovat #
         }
-  
-    
+
+        
+            /* //HELP VYPIS PRO TOKENY
        for(  $i=0 ; $i< 10; $i++)
         {
             $slovo = new Tokeny();
@@ -100,60 +335,7 @@ elseif ($argc > 2) {
    
 
             printf("%s p:%d\n",$slovo->text,$slovo->poradi);       
-        }
-       
-        /*
-            $slovo1 = new Tokeny();
-            $slovo1->text = Get_token();
-            $slovo1->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo1->text,$slovo1->poradi); 
-        
-                        $slovo9 = new Tokeny();
-            $slovo9->text = Get_token();
-            $slovo9->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo9->text,$slovo9->poradi);
-                        $slovo2 = new Tokeny();
-            $slovo2->text = Get_token();
-            $slovo2->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo2->text,$slovo2->poradi);
-                        $slovo3 = new Tokeny();
-            $slovo3->text = Get_token();
-            $slovo3->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo3->text,$slovo3->poradi);
-                        $slovo4 = new Tokeny();
-            $slovo4->text = Get_token();
-            $slovo4->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo4->text,$slovo4->poradi);
-                        $slovo5 = new Tokeny();
-            $slovo5->text = Get_token();
-            $slovo5->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo5->text,$slovo5->poradi);
-                        $slovo6 = new Tokeny();
-            $slovo6->text = Get_token();
-            $slovo6->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo6->text,$slovo6->poradi);
-                                 $slovo7 = new Tokeny();
-            $slovo7->text = Get_token();
-            $slovo7->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo7->text,$slovo7->poradi);
-                                             $slovo8 = new Tokeny();
-            $slovo8->text = Get_token();
-            $slovo8->poradi = $citac_poradi;
-            printf("%s p:%d\n",$slovo8->text,$slovo8->poradi);
-        */
-        //TODO pokayde volat ord($char) a podminka konce je FALSE === $char
-        /*
-    $char=fgetc($STDIN);
-    printf("CODE : %d",$char);
-    if($char == 13)
-    {
-        print("enter");
-    }
-    print("\n");
-    $char=ord($char);
-    print($char);
-        */
-	exit(0);
+        }*/
 ?>
 
 

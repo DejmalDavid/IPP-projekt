@@ -1,11 +1,13 @@
-a  
+  .IPPcode18
 
 dd       	   jedna    dva  #koment  
             
 #celz	 radek koment
       
- 		  
-sub tri 	ctzri
+             CreateFrame
+
+		  
+sUb tri 	ctzri  d
 q
 
 

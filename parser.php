@@ -18,6 +18,12 @@ $gram_var_symbol = array("int2char","strlen","type","move");
 $gram_var_type = array("read");
 $gram_label_sym_sym = array("jumpifeq","jumpifneq");
 
+$var_types = array("int","bool","string");
+
+$global_frame= array();
+$local_frame= array();
+$temp_frame= array ();
+
 
 //simulace struktury tokeny
 class Tokeny{
@@ -249,6 +255,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
        $token->poradi= $citac_poradi;
        $lower = strtolower($token->text);
     }
+    valid_var("bool@falSe");
     exit(0);
 }
 else
@@ -336,6 +343,58 @@ else
 
             printf("%s p:%d\n",$slovo->text,$slovo->poradi);       
         }*/
+        
+        
+     function valid_var ($text)
+     {
+         global $var_types,$int_types;
+         $substr_pole=explode('@', $text);
+         $prefix=$substr_pole[0];
+         $suffix=$substr_pole[1];
+         
+         $prefix= strtolower($prefix);  //case sensitive????
+         
+         if($prefix=="int")
+         {
+                 $i=0;
+                 $asci= ord($suffix[$i]);
+                // printf("%d \n",$asci);
+                 if(($asci== 43)||($asci== 45))
+                 {
+                    $i++;
+                  //  print("prvni znamenko\n");
+                 }
+                 while ($i< strlen($suffix))
+                 {
+                     $asci= ord($suffix[$i]);
+                    // printf("%d \n",$asci);
+                     if(($asci< 48)||($asci> 57))
+                     {
+                         print("zly sufix type int \n");    //TODO
+                         return FALSE;  
+                     }
+                     $i++;
+                 }
+             
+         }
+         elseif ($prefix=="bool") {
+             $suffix= strtolower($suffix);  //TODO case sensitive???
+             if(($suffix!="true")&&($suffix!="false"))
+             {
+                print("zly sufix type bool \n");    //TODO
+                return FALSE;  
+             }
+         }
+         elseif ($prefix=="string") {
+            //TODO
+             return FALSE;
+         }
+         else
+         {
+             print("Zly prefix var\n");     //TODO
+             return false;
+         }
+     }
 ?>
 
 

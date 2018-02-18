@@ -1,0 +1,5 @@
+.IPPcode18
+defvar string@ahoj
+defvar string@ahoj\032svete
+defvar string@defvar string@defvar string@
+defvar string@ahoj#ahoj#\032

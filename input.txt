@@ -7,7 +7,7 @@ dd       	   jedna    dva  #koment
              CreateFrame
 
 		  
-sUb tri 	ctzri  d
+sUb trři 	ctzri  d
 q
 
 

@@ -5,9 +5,10 @@ $param_help_text="Ahoj jsem paramtert help!"; //TODO
 // TODO exit nebo return ???
 
 //Globalni promene 
-$STDIN = fopen("input2.txt", "r");  //TODO
+$STDIN = fopen("input.txt", "r");  //TODO
 $citac_poradi=0;
 $nuluj_citac=FALSE;
+$koment = FALSE;
 
 $gram_nic = array("createframe","pushframe","popframe","return","break");
 $gram_var = array("defvar","pops");
@@ -255,7 +256,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
        $token->poradi= $citac_poradi;
        $lower = strtolower($token->text);
     }
-    valid_var("bool@falSe");
+    valid_konst("strinG@falSe\\211\\555\\552ř");
     exit(0);
 }
 else
@@ -265,16 +266,10 @@ else
 }
 
 
-
-  
-
- 
-	
-        
         // Vraci string tokenu a nastavuje globalni promenou citac_poradi
  function Get_token()
         {
-            global $STDIN,$citac_poradi,$nuluj_citac;   //global promene
+            global $STDIN,$citac_poradi,$nuluj_citac,$koment;   //global promene
             $znak=fgetc($STDIN);    
             $char=ord($znak);
             while ($znak !== FALSE)     //konec souboru
@@ -293,7 +288,7 @@ else
                     }
                     continue;   //vse se otestuje znova
                 }
-                if( $char == 35)        // # kometar
+                if( ($char == 35) || ($koment == TRUE))       // # kometar nebo spapany #
                 {
                     while(($char != 10) && ($znak !== FALSE))   // precte do konce radku
                     {
@@ -306,14 +301,15 @@ else
                     $char=ord($znak);
                    // printf (" tady %d;",$char);       //help vypis
                     $citac_poradi=0;    // novy radek - token bude prvni
+                    $koment=FALSE;
                     continue;   // testuj znova
                 }
                 $token="";
-                while(($char >= 33) && ($char<= 126) && ($znak !== FALSE))  // nalezen tiknutelny znak
-                { 
+                while(($char >= 33) && ($char != 127) && ($znak !== FALSE)&&($char != 35)  )  // nalezen tiknutelny znak a neni to #
+                {                  
                     $token=$token.$znak;    //konkaterace
                     $znak=fgetc($STDIN);
-                    $char=ord($znak); 
+                    $char=ord($znak);                    
                     //printf("ASCII:%d \n",$char);       //help vypis
                 }
                 if($nuluj_citac== TRUE) // predchozi token snedl EOL, vynulovat citac
@@ -324,6 +320,10 @@ else
                 if(($char == 10)|| ($char== 13))    // snedli jsme EOL pro dalsi token
                 {
                    $nuluj_citac=TRUE;
+                }
+                if( $char == 35)    //snedli jsme #
+                {
+                    $koment= TRUE;
                 }
                 $citac_poradi++;
                 return $token;
@@ -344,14 +344,32 @@ else
             printf("%s p:%d\n",$slovo->text,$slovo->poradi);       
         }*/
         
-        
-     function valid_var ($text)
+     function get_prefix($text)
+     {   
+         $poradi=strpos($text,"@");
+         if($poradi===FALSE)
+         {
+             print("nenasel sem @\n");
+             return "error";
+         }
+         $prefix= substr($text,0,$poradi);
+         return $prefix;
+     }
+
+
+     function valid_konst ($text)
      {
          global $var_types,$int_types;
-         $substr_pole=explode('@', $text);
-         $prefix=$substr_pole[0];
-         $suffix=$substr_pole[1];
-         
+         $poradi=strpos($text,"@");
+         if($poradi===FALSE)
+         {
+             print("nenasel sem @\n");
+             return FALSE;
+         }
+         $prefix= substr($text,0,$poradi);
+         //printf("poradi:%d , prefix:%s\n",$poradi,$prefix);
+         $suffix=substr($text,$poradi+1, strlen($text)-$poradi);
+         //printf("poradi:%d , suffix:%s\n",$poradi,$suffix);
          $prefix= strtolower($prefix);  //case sensitive????
          
          if($prefix=="int")
@@ -375,7 +393,7 @@ else
                      }
                      $i++;
                  }
-             
+                 return TRUE;
          }
          elseif ($prefix=="bool") {
              $suffix= strtolower($suffix);  //TODO case sensitive???
@@ -384,10 +402,34 @@ else
                 print("zly sufix type bool \n");    //TODO
                 return FALSE;  
              }
+             else   return TRUE;
          }
          elseif ($prefix=="string") {
-            //TODO
-             return FALSE;
+             $zbytek= $suffix;
+             $poradi=strpos($zbytek,'\\');
+             while ($poradi !== FALSE)
+             {
+                $str = substr($zbytek,$poradi+1,3);
+                if(strlen($str)!=3)
+                {
+                    print("za lomitkem nejsou 3 znaky\n");
+                    return FALSE;
+                }
+                for($i=0;$i<3;$i++)
+                {
+                    $str_ascii=ord($str[$i]);
+                    if(($str_ascii<48)||($str_ascii>57))
+                    {
+                         print("zly suffix za lomitkem nejsou cisla\n");    //TODO
+                        return FALSE;
+                    }
+                }
+
+                $zbytek = substr($zbytek,$poradi+1, strlen($zbytek)-$poradi);
+                $poradi=strpos($zbytek,'\\');
+             }
+             print($zbytek);
+             return TRUE;
          }
          else
          {

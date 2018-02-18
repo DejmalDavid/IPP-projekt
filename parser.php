@@ -19,12 +19,9 @@ $gram_var_symbol = array("int2char","strlen","type","move");
 $gram_var_type = array("read");
 $gram_label_sym_sym = array("jumpifeq","jumpifneq");
 
-$var_types = array("int","bool","string");
+$konst_types = array("int","bool","string");
 
-$global_frame= array();
-$local_frame= array();
-$temp_frame= array ();
-
+$var_chars = array(95,45,36,38,37,42);
 
 //simulace struktury tokeny
 class Tokeny{
@@ -58,17 +55,20 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
     {
         if(in_array($lower, $gram_nic)) //Instrukce bey parametru
         {
+            $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
             if($token->poradi != 1)     //musi byt prvni
             {
                 print("Instukce neni prvni");   //TODO
                 exit(21);
             }
+            printf("Nalezeny je OK:%s\n",$name);
             //TODO generovani XML
         }
 
         if(in_array($lower, $gram_var))
         {
+            $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
             if($token->poradi != 1)     //musi byt prvni
             {
@@ -82,12 +82,18 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("var neni druhy");   //TODO
                 exit(21); 
              }
-             //TODO validace var
+             if(valid_variable($token->text)===FALSE)
+             {
+                print("var neni validni");   //TODO
+                exit(21); 
+             }
+             printf("Nalezeny je OK:%s\n",$name);
              //TODO genere XML
         }
         
         if(in_array($lower, $gram_label))
         {
+            $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
             if($token->poradi != 1)     //musi byt prvni
             {
@@ -101,12 +107,14 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("label neni druhy");   //TODO
                 exit(21); 
              }
+             printf("Nalezeny je OK:%s\n",$name);
              //TODO validace label
              //TODO genere XML
         }
         
         if(in_array($lower, $gram_symbol))
         {
+            $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
             if($token->poradi != 1)     //musi byt prvni
             {
@@ -120,13 +128,19 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("symbol neni druhy");   //TODO
                 exit(21); 
              }
-             //TODO validace symbol
+             if((valid_variable($token->text)===FALSE)&&(valid_konst($token->text)===FALSE))
+             {
+                print("symbol neni validni");   //TODO
+                exit(21); 
+             }
+             printf("Nalezeny je OK:%s\n",$name);
              //TODO genere XML
         }
         
         
         if(in_array($lower, $gram_var_symbol))
         {
+            $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
             if($token->poradi != 1)     //musi byt prvni
             {
@@ -140,7 +154,11 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("var neni druhy");   //TODO
                 exit(21); 
              }
-             //TODO validace var
+            if(valid_variable($token->text)===FALSE)
+             {
+                print("var neni validni");   //TODO
+                exit(21); 
+             }
              $token->text = Get_token();
              $token->poradi= $citac_poradi;
              if($token->poradi != 3)
@@ -148,12 +166,18 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("symbol neni treti");   //TODO
                 exit(21); 
              }
-             //TODO validace symbol
+             if((valid_variable($token->text)===FALSE)&&(valid_konst($token->text)===FALSE))
+             {
+                print("symbol neni validni");   //TODO
+                exit(21); 
+             }
+             printf("Nalezeny je OK:%s\n",$name);
              //TODO genere XML
         }
         
         if(in_array($lower, $gram_var_type))
         {
+            $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
             if($token->poradi != 1)     //musi byt prvni
             {
@@ -167,7 +191,11 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("var neni druhy");   //TODO
                 exit(21); 
              }
-             //TODO validace var
+            if(valid_variable($token->text)===FALSE)
+             {
+                print("var neni validni");   //TODO
+                exit(21); 
+             }
              $token->text = Get_token();
              $token->poradi= $citac_poradi;
              if($token->poradi != 3)
@@ -175,12 +203,14 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("type neni treti");   //TODO
                 exit(21); 
              }
+             printf("Nalezeny je OK:%s\n",$name);
              //TODO validace type
              //TODO genere XML
         }
         
         if(in_array($lower, $gram_var_sym_sym))
         {
+            $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
             if($token->poradi != 1)     //musi byt prvni
             {
@@ -194,7 +224,11 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("var neni druhy");   //TODO
                 exit(21); 
              }
-             //TODO validace var
+            if(valid_variable($token->text)===FALSE)
+             {
+                print("var neni validni");   //TODO
+                exit(21); 
+             }
              $token->text = Get_token();
              $token->poradi= $citac_poradi;
              if($token->poradi != 3)
@@ -202,7 +236,11 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("symbol neni treti");   //TODO
                 exit(21); 
              }
-             //TODO validace symbol
+             if((valid_variable($token->text)===FALSE)&&(valid_konst($token->text)===FALSE))
+             {
+                print("symbol neni validni");   //TODO
+                exit(21); 
+             }
              $token->text = Get_token();
              $token->poradi= $citac_poradi;
              if($token->poradi != 4)
@@ -210,12 +248,18 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("symbol neni ctvrty");   //TODO
                 exit(21); 
              }
-             //TODO validace symbol
+             if((valid_variable($token->text)===FALSE)&&(valid_konst($token->text)===FALSE))
+             {
+                print("symbol neni validni");   //TODO
+                exit(21); 
+             }
+             printf("Nalezeny je OK:%s\n",$name);
              //TODO genere XML
         }
         
         if(in_array($lower, $gram_label_sym_sym))
         {
+            $name = $token->text;   //TODO
             printf("nasel sem:%s\n\n",$token->text);    //TODO
             if($token->poradi != 1)     //musi byt prvni
             {
@@ -237,7 +281,11 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("symbol neni treti");   //TODO
                 exit(21); 
              }
-             //TODO validace symbol
+             if((valid_variable($token->text)===FALSE)&&(valid_konst($token->text)===FALSE))
+             {
+                print("symbol neni validni");   //TODO
+                exit(21); 
+             }
              $token->text = Get_token();
              $token->poradi= $citac_poradi;
              if($token->poradi != 4)
@@ -245,7 +293,12 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("symbol neni ctvrty");   //TODO
                 exit(21); 
              }
-             //TODO validace symbol
+             if((valid_variable($token->text)===FALSE)&&(valid_konst($token->text)===FALSE))
+             {
+                print("symbol neni validni");   //TODO
+                exit(21); 
+             }
+             printf("Nalezeny je OK:%s\n",$name);
              //TODO genere XML
         }
 
@@ -256,7 +309,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
        $token->poradi= $citac_poradi;
        $lower = strtolower($token->text);
     }
-    valid_konst("strinG@falSe\\211\\555\\552ř");
+    valid_variable("LF@kS*-Hk9-_9asj");
     exit(0);
 }
 else
@@ -357,9 +410,9 @@ else
      }
 
 
-     function valid_konst ($text)
+     function valid_variable($text)
      {
-         global $var_types,$int_types;
+         global $var_chars;
          $poradi=strpos($text,"@");
          if($poradi===FALSE)
          {
@@ -370,10 +423,58 @@ else
          //printf("poradi:%d , prefix:%s\n",$poradi,$prefix);
          $suffix=substr($text,$poradi+1, strlen($text)-$poradi);
          //printf("poradi:%d , suffix:%s\n",$poradi,$suffix);
-         $prefix= strtolower($prefix);  //case sensitive????
-         
+         //$prefix= strtolower($prefix);  //case sensitive???? asi ne
+         if(strlen($suffix)==0)
+         {
+             print("suffix nesmi byt nulovy\n");
+             return FALSE;
+         }
+         if(($prefix != "GF")&&($prefix != "TF") && ($prefix != "LF"))
+         {
+             print("prefix neni validni oznaceni ramce\n");
+             return FALSE;
+         }
+         $asci_var=ord($suffix[0]);
+         if((in_array($asci_var, $var_chars)===FALSE)&& (($asci_var < 65) || ($asci_var > 90)) && (($asci_var <97) || ($asci_var>122)))
+         {
+             print("var zacina spatne\n");
+             return FALSE;
+         }
+         for($i=1;$i< strlen($suffix);$i++)
+         {
+            $asci_var=ord($suffix[$i]);
+            if((in_array($asci_var, $var_chars)===FALSE)&& (($asci_var < 48) || ($asci_var > 57))&&(($asci_var < 65) || ($asci_var > 90)) && (($asci_var <97) || ($asci_var>122)))
+            {
+                print("var je spatne\n");
+                return FALSE;
+            } 
+         }
+     }
+
+
+
+
+     function valid_konst ($text)
+     {
+         global $konst_types,$int_types;
+         $poradi=strpos($text,"@");
+         if($poradi===FALSE)
+         {
+             print("nenasel sem @\n");
+             return FALSE;
+         }
+         $prefix= substr($text,0,$poradi);
+         //printf("poradi:%d , prefix:%s\n",$poradi,$prefix);
+         $suffix=substr($text,$poradi+1, strlen($text)-$poradi);
+         //printf("poradi:%d , suffix:%s\n",$poradi,$suffix);
+         //$prefix= strtolower($prefix);  //case sensitive???? asi ne
          if($prefix=="int")
          {
+                if(strlen($suffix)==0)
+                {
+                    print("suffix nesmi byt nulovy pro int\n");
+                    return FALSE;
+                }
                  $i=0;
                  $asci= ord($suffix[$i]);
                 // printf("%d \n",$asci);
@@ -396,6 +497,11 @@ else
                  return TRUE;
          }
          elseif ($prefix=="bool") {
+                if(strlen($suffix)==0)
+                {
+                    print("suffix nesmi byt nulovy pro bool\n");
+                    return FALSE;
+                }
              $suffix= strtolower($suffix);  //TODO case sensitive???
              if(($suffix!="true")&&($suffix!="false"))
              {

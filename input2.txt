@@ -1,6 +1,6 @@
 .IPPcode18
 DEFVAR GF@counter
-MOVE GF@counter string@ # Inicializace prom �nn� na pr� zdn� �et� zec
+MOVE GF@counter string@ # Inicializace prom �nn� na při zdn� �et� zec
 # Jednoduch � iterace , dokud nebude spln �na zadan� podm � nka
 LABEL while
 JUMPIFEQ end GF@counter string@aaa

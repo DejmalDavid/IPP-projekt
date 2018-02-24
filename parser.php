@@ -47,6 +47,12 @@ $IPPCODE_hlavicka->text = Get_token();
 $IPPCODE_hlavicka->poradi= $citac_poradi;
 if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 {
+    $xml = new DOMDocument("1.0","UTF-8");
+    $xml_program = $xml->createElement("program");
+    $xml_program->getAttribute("language"); 
+    $xml->appendChild( $xml_program);
+    $xml_program->setAttribute("language","IPPcode18");
+ 
     $token = new Tokeny();  //nactu token
     $token->text = Get_token();
     $token->poradi= $citac_poradi;
@@ -63,10 +69,15 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 exit(21);
             }
             printf("Nalezeny je OK:%s\n",$name);
-            //TODO generovani XML
+            //generovani XML
+	    $xml_instrukce = $xml->createElement("instruction");
+	    $xml_program->appendChild($xml_instrukce);
+	    $xml_instrukce->setAttribute("order", $token->poradi);
+	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    
         }
 
-        if(in_array($lower, $gram_var))
+        else if(in_array($lower, $gram_var))
         {
             $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
@@ -75,23 +86,32 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("Instukce neni prvni");   //TODO
                 exit(21);
             }
-             $token->text = Get_token();
-             $token->poradi= $citac_poradi;
-             if($token->poradi != 2)
+	     $token2 = new Tokeny();
+             $token2->text = Get_token();
+             $token2->poradi= $citac_poradi;
+             if($token2->poradi != 2)
              {
                 print("var neni druhy");   //TODO
                 exit(21); 
              }
-             if(valid_variable($token->text)===FALSE)
+             if(valid_variable($token2->text)===FALSE)
              {
                 print("var neni validni");   //TODO
                 exit(21); 
              }
              printf("Nalezeny je OK:%s\n",$name);
              //TODO genere XML
+	    $xml_instrukce = $xml->createElement("instruction");
+	    $xml_program->appendChild($xml_instrukce);
+	    $xml_instrukce->setAttribute("order", $token->poradi);
+	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    
+	    $xml_arg1 = $xml->createElement("arg1", $token2->text);
+	    $xml_arg1->setAttribute("type","var");
+	    $xml_instrukce->appendChild($xml_arg1);
         }
         
-        if(in_array($lower, $gram_label))
+        else if(in_array($lower, $gram_label))
         {
             $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
@@ -100,19 +120,32 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("Instukce neni prvni");   //TODO
                 exit(21);
             }
-             $token->text = Get_token();
-             $token->poradi= $citac_poradi;
-             if($token->poradi != 2)
+	     $token2 = new Tokeny();
+             $token2->text = Get_token();
+             $token2->poradi= $citac_poradi;
+             if($token2->poradi != 2)
              {
                 print("label neni druhy");   //TODO
                 exit(21); 
              }
              printf("Nalezeny je OK:%s\n",$name);
-             //TODO validace label
+             if(valid_label($token2->text)===FALSE)
+             {
+                print("label neni validni");   //TODO
+                exit(21); 
+             }
              //TODO genere XML
+	    $xml_instrukce = $xml->createElement("instruction");
+	    $xml_program->appendChild($xml_instrukce);
+	    $xml_instrukce->setAttribute("order", $token->poradi);
+	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    
+	    $xml_arg1 = $xml->createElement("arg1","$token2->text");
+	    $xml_arg1->setAttribute("type","label");
+	    $xml_instrukce->appendChild($xml_arg1);
         }
         
-        if(in_array($lower, $gram_symbol))
+        else if(in_array($lower, $gram_symbol))
         {
             $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
@@ -121,24 +154,46 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("Instukce neni prvni");   //TODO
                 exit(21);
             }
-             $token->text = Get_token();
-             $token->poradi= $citac_poradi;
-             if($token->poradi != 2)
+	    
+	    $xml_instrukce = $xml->createElement("instruction");
+	    $xml_program->appendChild($xml_instrukce);
+	    $xml_instrukce->setAttribute("order", $token->poradi);
+	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    
+
+	    
+	     $token2 = new Tokeny();
+             $token2->text = Get_token();
+             $token2->poradi= $citac_poradi;
+             if($token2->poradi != 2)
              {
                 print("symbol neni druhy");   //TODO
                 exit(21); 
              }
-             if((valid_variable($token->text)===FALSE)&&(valid_konst($token->text)===FALSE))
+	     
+	     $xml_arg1 = $xml->createElement("arg1","$token2->text");
+	     
+             if(valid_variable($token2->text)===TRUE)
              {
-                print("symbol neni validni");   //TODO
-                exit(21); 
+		 $xml_arg1->setAttribute("type","var");
              }
+	     elseif (valid_konst($token2->text)===TRUE)
+	     {   
+		  $xml_arg1->setAttribute("type", get_prefix($token2->text));     
+	     }
+	     else
+	     {
+		print("symbol neni validni");   //TODO
+                exit(21);    
+	     }
              printf("Nalezeny je OK:%s\n",$name);
-             //TODO genere XML
+             //genere XML
+	     $xml_instrukce->appendChild($xml_arg1);
+
         }
         
         
-        if(in_array($lower, $gram_var_symbol))
+        else if(in_array($lower, $gram_var_symbol))
         {
             $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
@@ -147,35 +202,60 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("Instukce neni prvni");   //TODO
                 exit(21);
             }
-             $token->text = Get_token();
-             $token->poradi= $citac_poradi;
-             if($token->poradi != 2)
+	    
+	    $xml_instrukce = $xml->createElement("instruction");
+	    $xml_program->appendChild($xml_instrukce);
+	    $xml_instrukce->setAttribute("order", $token->poradi);
+	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    
+	    $token2 = new Tokeny();
+             $token2->text = Get_token();
+             $token2->poradi= $citac_poradi;
+             if($token2->poradi != 2)
              {
                 print("var neni druhy");   //TODO
                 exit(21); 
              }
-            if(valid_variable($token->text)===FALSE)
+            if(valid_variable($token2->text)===FALSE)
              {
                 print("var neni validni");   //TODO
                 exit(21); 
              }
-             $token->text = Get_token();
-             $token->poradi= $citac_poradi;
-             if($token->poradi != 3)
+	     
+	    $xml_arg1 = $xml->createElement("arg1", $token2->text);
+	    $xml_arg1->setAttribute("type","var");
+	    $xml_instrukce->appendChild($xml_arg1);
+	    
+	    
+	     $token3 = new Tokeny();
+             $token3->text = Get_token();
+             $token3->poradi= $citac_poradi;
+             if($token3->poradi != 3)
              {
                 print("symbol neni treti");   //TODO
                 exit(21); 
              }
-             if((valid_variable($token->text)===FALSE)&&(valid_konst($token->text)===FALSE))
+	     $xml_arg2 = $xml->createElement("arg2","$token3->text");
+	     
+             if(valid_variable($token3->text)===TRUE)
              {
-                print("symbol neni validni");   //TODO
-                exit(21); 
+		 $xml_arg2->setAttribute("type","var");
              }
+	     elseif (valid_konst($token3->text)===TRUE)
+	     {   
+		  $xml_arg2->setAttribute("type", get_prefix($token3->text));     
+	     }
+	     else
+	     {
+		print("symbol neni validni");   //TODO
+                exit(21);    
+	     }
              printf("Nalezeny je OK:%s\n",$name);
              //TODO genere XML
+	     $xml_instrukce->appendChild($xml_arg2);
         }
         
-        if(in_array($lower, $gram_var_type))
+        else if(in_array($lower, $gram_var_type))
         {
             $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
@@ -204,11 +284,15 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 exit(21); 
              }
              printf("Nalezeny je OK:%s\n",$name);
-             //TODO validace type
+             if(valid_type($token->text)===FALSE)
+             {
+                print("type neni validni");   //TODO
+                exit(21); 
+             }
              //TODO genere XML
         }
         
-        if(in_array($lower, $gram_var_sym_sym))
+        else if(in_array($lower, $gram_var_sym_sym))
         {
             $name = $token->text;   //TODO
             printf("nasel sem:%s\n",$token->text);    //TODO
@@ -257,7 +341,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
              //TODO genere XML
         }
         
-        if(in_array($lower, $gram_label_sym_sym))
+        else if(in_array($lower, $gram_label_sym_sym))
         {
             $name = $token->text;   //TODO
             printf("nasel sem:%s\n\n",$token->text);    //TODO
@@ -273,7 +357,11 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 print("label neni druhy");   //TODO
                 exit(21); 
              }
-             //TODO validace label
+             if(valid_label($token->text)===FALSE)
+             {
+                print("label neni validni");   //TODO
+                exit(21); 
+             }
              $token->text = Get_token();
              $token->poradi= $citac_poradi;
              if($token->poradi != 3)
@@ -301,15 +389,18 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
              printf("Nalezeny je OK:%s\n",$name);
              //TODO genere XML
         }
-
-
-
+        else
+        {
+            print("Neznamy token! konec\n");
+            exit(21);
+        }
 
        $token->text = Get_token(); //nakonec nacte dalsi token
        $token->poradi= $citac_poradi;
        $lower = strtolower($token->text);
     }
-    valid_variable("LF@kS*-Hk9-_9asj");
+    $xml->save("./test.xml");
+    echo $xml->saveXML() ;
     exit(0);
 }
 else
@@ -396,7 +487,21 @@ else
 
             printf("%s p:%d\n",$slovo->text,$slovo->poradi);       
         }*/
-        
+     
+     function valid_type($text)
+     {
+       $text= strtolower($text);
+       if(($text=="int")||($text=="bool")||($text=="string"))
+       {
+           return TRUE;
+       }
+       else     
+       {
+           return FALSE;
+       }
+     }
+
+
      function get_prefix($text)
      {   
          $poradi=strpos($text,"@");
@@ -409,7 +514,28 @@ else
          return $prefix;
      }
 
-
+     function valid_label($text)
+     {
+         global $var_chars;
+         $asci_var=ord($text[0]);
+         if((in_array($asci_var, $var_chars)===FALSE)&& (($asci_var < 65) || ($asci_var > 90)) && (($asci_var <97) || ($asci_var>122)))
+         {
+             print("label zacina spatne\n");
+             return FALSE;
+         }
+         for($i=1;$i< strlen($text);$i++)
+         {
+            $asci_var=ord($text[$i]);
+            if((in_array($asci_var, $var_chars)===FALSE)&& (($asci_var < 48) || ($asci_var > 57))&&(($asci_var < 65) || ($asci_var > 90)) && (($asci_var <97) || ($asci_var>122)))
+            {
+                print("label je spatne\n");
+                return FALSE;
+            } 
+         }
+         return TRUE;
+     }
+     
+     
      function valid_variable($text)
      {
          global $var_chars;
@@ -449,9 +575,8 @@ else
                 return FALSE;
             } 
          }
+         return TRUE;
      }
-
-
 
 
      function valid_konst ($text)

@@ -1,13 +1,5 @@
   .IPPcode18
-
-dd       	   jedna    dva  #koment  
-            
-#celz	 radek koment
-      
-             CreateFrame
-
-		  
-sUb trři 	ctzri  d
-q
-
+createframe
+defvar GF@prom
+pushframe
 

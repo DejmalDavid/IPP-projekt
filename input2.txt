@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .IPPcode18
 DEFVAR GF@counter
 MOVE GF@counter string@ # Inicializace prom �nn� na při zdn� �et� zec
@@ -9,4 +10,17 @@ WRITE GF@counter
 WRITE string@\010
 CONCAT GF@counter GF@counter string@a
 JUMP while
+=======
+.IPPcode18
+DEFVAR GF@counter
+MOVE GF@counter string@ # Inicializace prom �nn� na při zdn� �et� zec
+# Jednoduch � iterace , dokud nebude spln �na zadan� podm � nka
+LABEL while
+JUMPIFEQ end GF@counter string@aaa
+WRITE string@counter\032obsahuje\032
+WRITE GF@counter
+WRITE string@\010
+CONCAT GF@counter GF@counter string@a
+JUMP while
+>>>>>>> ceab0099c6c30b9985dcd3c85533bb2ccf0421bf
 LABEL end

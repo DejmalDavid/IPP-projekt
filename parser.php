@@ -43,6 +43,7 @@ elseif ($argc > 2) {
     exit(21);   //TODO
 }
 
+
 $IPPCODE_hlavicka= new Tokeny();
 $IPPCODE_hlavicka->text = Get_token(); 
 $IPPCODE_hlavicka->poradi= $citac_poradi;
@@ -110,7 +111,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 	    $xml_instrukce->setAttribute("order", $token->poradi);
 	    $xml_instrukce->setAttribute("opcode", $token->text);
 	    
-	    $xml_arg1 = $xml->createElement("arg1", $token2->text);
+	    $xml_arg1 = $xml->createElement("arg1", replace_chars($token2->text));
 	    $xml_arg1->setAttribute("type","var");
 	    $xml_instrukce->appendChild($xml_arg1);
         }
@@ -176,12 +177,12 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 	     
              if(valid_variable($token2->text)===TRUE)
              {
-		 $xml_arg1 = $xml->createElement("arg1","$token2->text");
+		 $xml_arg1 = $xml->createElement("arg1",replace_chars($token2->text));
 		 $xml_arg1->setAttribute("type","var");
              }
 	     elseif (valid_konst($token2->text)===TRUE)
 	     {   
-		$xml_arg1 = $xml->createElement("arg1",get_suffix($token2->text));
+		$xml_arg1 = $xml->createElement("arg1",replace_chars(get_suffix($token2->text)));
 		$xml_arg1->setAttribute("type", get_prefix($token2->text));   
 	     }
 	     else
@@ -225,7 +226,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 exit(21); 
              }
 	     
-	    $xml_arg1 = $xml->createElement("arg1", $token2->text);
+	    $xml_arg1 = $xml->createElement("arg1", replace_chars($token2->text));
 	    $xml_arg1->setAttribute("type","var");
 	    $xml_instrukce->appendChild($xml_arg1);
 	    
@@ -242,12 +243,12 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 	     
              if(valid_variable($token3->text)===TRUE)
              {
-		 $xml_arg2 = $xml->createElement("arg2","$token3->text");    
+		 $xml_arg2 = $xml->createElement("arg2", replace_chars($token3->text));    
 		 $xml_arg2->setAttribute("type","var");
              }
 	     elseif (valid_konst($token3->text)===TRUE)
 	     {   
-		  $xml_arg2 = $xml->createElement("arg2",get_suffix($token3->text));
+		  $xml_arg2 = $xml->createElement("arg2", replace_chars(get_suffix($token3->text)));
 		  $xml_arg2->setAttribute("type", get_prefix($token3->text));     
 	     }
 	     else
@@ -289,7 +290,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 exit(21); 
              }
 	     
-	    $xml_arg1 = $xml->createElement("arg1", $token2->text);
+	    $xml_arg1 = $xml->createElement("arg1", replace_chars($token2->text) );
 	    $xml_arg1->setAttribute("type","var");
 	    $xml_instrukce->appendChild($xml_arg1);
 	     
@@ -341,7 +342,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 exit(21); 
              }
 	     
-	    $xml_arg1 = $xml->createElement("arg1", $token2->text);
+	    $xml_arg1 = $xml->createElement("arg1", replace_chars($token2->text));
 	    $xml_arg1->setAttribute("type","var");
 	    $xml_instrukce->appendChild($xml_arg1);
 	     
@@ -354,12 +355,12 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
              }
              if(valid_variable($token3->text)===TRUE)
              {
-		 $xml_arg2 = $xml->createElement("arg2","$token3->text");    
+		 $xml_arg2 = $xml->createElement("arg2", replace_chars($token3->text));    
 		 $xml_arg2->setAttribute("type","var");
              }
 	     elseif (valid_konst($token3->text)===TRUE)
 	     {   
-		  $xml_arg2 = $xml->createElement("arg2",get_suffix($token3->text));
+		  $xml_arg2 = $xml->createElement("arg2", replace_chars(get_suffix($token3->text)));
 		  $xml_arg2->setAttribute("type", get_prefix($token3->text));     
 	     }
 	     else
@@ -378,12 +379,12 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
              }
             if(valid_variable($token4->text)===TRUE)
              {
-		 $xml_arg3 = $xml->createElement("arg3","$token4->text");    
+		 $xml_arg3 = $xml->createElement("arg3", replace_chars($token4->text));    
 		 $xml_arg3->setAttribute("type","var");
              }
 	     elseif (valid_konst($token4->text)===TRUE)
 	     {   
-		  $xml_arg3 = $xml->createElement("arg3",get_suffix($token4->text));
+		  $xml_arg3 = $xml->createElement("arg3", replace_chars(get_suffix($token4->text)));
 		  $xml_arg3->setAttribute("type", get_prefix($token4->text));     
 	     }
 	     else
@@ -436,12 +437,12 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
              }
              if(valid_variable($token3->text)===TRUE)
              {
-		 $xml_arg2 = $xml->createElement("arg2","$token3->text");    
+		 $xml_arg2 = $xml->createElement("arg2", replace_chars($token3->text));    
 		 $xml_arg2->setAttribute("type","var");
              }
 	     elseif (valid_konst($token3->text)===TRUE)
 	     {   
-		  $xml_arg2 = $xml->createElement("arg2",get_suffix($token3->text));
+		  $xml_arg2 = $xml->createElement("arg2", replace_chars(get_suffix($token3->text)));
 		  $xml_arg2->setAttribute("type", get_prefix($token3->text));     
 	     }
 	     else
@@ -460,12 +461,12 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
              }
             if(valid_variable($token4->text)===TRUE)
              {
-		 $xml_arg3 = $xml->createElement("arg3","$token4->text");    
+		 $xml_arg3 = $xml->createElement("arg3", replace_chars($token4->text));    
 		 $xml_arg3->setAttribute("type","var");
              }
 	     elseif (valid_konst($token4->text)===TRUE)
 	     {   
-		  $xml_arg3 = $xml->createElement("arg3",get_suffix($token4->text));
+		  $xml_arg3 = $xml->createElement("arg3", replace_chars(get_suffix($token4->text)));
 		  $xml_arg3->setAttribute("type", get_prefix($token4->text));     
 	     }
 	     else
@@ -565,18 +566,6 @@ else
             return "#KONEC";        //konec souboru, token nemuze obsahovat #
         }
 
-        
-            /* //HELP VYPIS PRO TOKENY
-       for(  $i=0 ; $i< 10; $i++)
-        {
-            $slovo = new Tokeny();
-            $slovo->text = Get_token();
-            $slovo->poradi = $citac_poradi;
-            
-   
-
-            printf("%s p:%d\n",$slovo->text,$slovo->poradi);       
-        }*/
      
      function valid_type($text)
      {
@@ -771,4 +760,13 @@ else
              return false;
          }
      }
+     
+     function replace_chars($text)
+     {
+	     $text=str_replace("&","&amp;", $text);
+	     $text=str_replace("<","&lt;", $text);
+	     $text=str_replace(">","&gt;", $text);
+	     return $text;
+     }
+     
 ?>

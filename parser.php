@@ -6,7 +6,7 @@ $param_help_text="Ahoj jsem paramtert help!"; //TODO
 // TODO exit nebo return ???
 
 //Globalni promene 
-$STDIN = fopen("input2.txt", "r");  //TODO
+//STDIN = fopen("input2.txt", "r");  //TODO
 $citac_poradi=0;
 $nuluj_citac=FALSE;
 $koment = FALSE;
@@ -504,22 +504,23 @@ else
         // Vraci string tokenu a nastavuje globalni promenou citac_poradi
  function Get_token()
         {
-            global $STDIN,$citac_poradi,$nuluj_citac,$koment;   //global promene
-            $znak=fgetc($STDIN);    
+            global $citac_poradi,$nuluj_citac,$koment;   //global promene
+            $znak=fgetc(STDIN);    
             $char=ord($znak);
             while ($znak !== FALSE)     //konec souboru
             {
                 if(($char <= 32))   // bile znaky
                 {
                     while(($char <= 32) && ($znak !== FALSE) )      //precte vsechny bile znaky
-                    {
-                        $znak=fgetc($STDIN);
-                        $char=ord($znak);
-                       // printf("ASCII:%d \n",$char);  //help vypis
-                        if(($char == 10)|| ($char == 13))   // byl tam EOL dalsi token bude prvni
+                    {                      
+			if(($char == 10)|| ($char == 13))   // byl tam EOL dalsi token bude prvni
                         {
                            $citac_poradi=0;
                         }
+                        $znak=fgetc(STDIN);
+                        $char=ord($znak);
+                       // printf("ASCII:%d \n",$char);  //help vypis
+
                     }
                     continue;   //vse se otestuje znova
                 }
@@ -528,11 +529,11 @@ else
                     while(($char != 10) && ($znak !== FALSE))   // precte do konce radku
                     {
                         
-                        $znak=fgetc($STDIN);
+                        $znak=fgetc(STDIN);
                         $char=ord($znak);
                        // printf ("%d;",$char);     //help vypis
                     }
-                    $znak=fgetc($STDIN);    // nacte prvni znak na novem radku
+                    $znak=fgetc(STDIN);    // nacte prvni znak na novem radku
                     $char=ord($znak);
                    // printf (" tady %d;",$char);       //help vypis
                     $citac_poradi=0;    // novy radek - token bude prvni
@@ -543,7 +544,7 @@ else
                 while(($char >= 33) && ($char != 127) && ($znak !== FALSE)&&($char != 35)  )  // nalezen tiknutelny znak a neni to #
                 {                  
                     $token=$token.$znak;    //konkaterace
-                    $znak=fgetc($STDIN);
+                    $znak=fgetc(STDIN);
                     $char=ord($znak);                    
                     //printf("ASCII:%d \n",$char);       //help vypis
                 }

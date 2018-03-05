@@ -8,6 +8,7 @@ $param_help_text="Ahoj jsem paramtert help!"; //TODO
 //Globalni promene 
 //STDIN = fopen("input2.txt", "r");  //TODO
 $citac_poradi=0;
+$citac_oppcode=1;
 $nuluj_citac=FALSE;
 $koment = FALSE;
 
@@ -15,8 +16,8 @@ $gram_nic = array("createframe","pushframe","popframe","return","break");
 $gram_var = array("defvar","pops");
 $gram_label = array("call","label","jump");
 $gram_symbol = array("pushs","write","dprint");
-$gram_var_sym_sym = array("add","sub","mul","idiv","lt","gt","eq","and","and","or","not","stri2int","concat","getchar","setchar");
-$gram_var_symbol = array("int2char","strlen","type","move");
+$gram_var_sym_sym = array("add","sub","mul","idiv","lt","gt","eq","and","and","or","stri2int","concat","getchar","setchar");
+$gram_var_symbol = array("int2char","strlen","type","move","not");
 $gram_var_type = array("read");
 $gram_label_sym_sym = array("jumpifeq","jumpifneq");
 
@@ -47,7 +48,7 @@ elseif ($argc > 2) {
 $IPPCODE_hlavicka= new Tokeny();
 $IPPCODE_hlavicka->text = Get_token(); 
 $IPPCODE_hlavicka->poradi= $citac_poradi;
-if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
+if(($IPPCODE_hlavicka->poradi == 1)&& (strtolower($IPPCODE_hlavicka->text) == ".ippcode18"))
 {
     $xml = new DOMDocument("1.0","UTF-8");
     $xml_program = $xml->createElement("program");
@@ -77,8 +78,8 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
             //generovani XML
 	    $xml_instrukce = $xml->createElement("instruction");
 	    $xml_program->appendChild($xml_instrukce);
-	    $xml_instrukce->setAttribute("order", $token->poradi);
-	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    $xml_instrukce->setAttribute("order", $citac_oppcode++);
+	    $xml_instrukce->setAttribute("opcode", strtoupper($token->text));
 	    
         }
 
@@ -108,8 +109,8 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
              //TODO genere XML
 	    $xml_instrukce = $xml->createElement("instruction");
 	    $xml_program->appendChild($xml_instrukce);
-	    $xml_instrukce->setAttribute("order", $token->poradi);
-	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    $xml_instrukce->setAttribute("order", $citac_oppcode++);
+	    $xml_instrukce->setAttribute("opcode", strtoupper($token->text));
 	    
 	    $xml_arg1 = $xml->createElement("arg1", replace_chars($token2->text));
 	    $xml_arg1->setAttribute("type","var");
@@ -142,10 +143,10 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
              //TODO genere XML
 	    $xml_instrukce = $xml->createElement("instruction");
 	    $xml_program->appendChild($xml_instrukce);
-	    $xml_instrukce->setAttribute("order", $token->poradi);
-	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    $xml_instrukce->setAttribute("order", $citac_oppcode++);
+	    $xml_instrukce->setAttribute("opcode", strtoupper($token->text));
 	    
-	    $xml_arg1 = $xml->createElement("arg1","$token2->text");
+	    $xml_arg1 = $xml->createElement("arg1",replace_chars($token2->text));
 	    $xml_arg1->setAttribute("type","label");
 	    $xml_instrukce->appendChild($xml_arg1);
         }
@@ -162,8 +163,8 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 	    
 	    $xml_instrukce = $xml->createElement("instruction");
 	    $xml_program->appendChild($xml_instrukce);
-	    $xml_instrukce->setAttribute("order", $token->poradi);
-	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    $xml_instrukce->setAttribute("order", $citac_oppcode++);
+	    $xml_instrukce->setAttribute("opcode", strtoupper($token->text));
 
              $token2->text = Get_token();
              $token2->poradi= $citac_poradi;
@@ -209,8 +210,8 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 	    
 	    $xml_instrukce = $xml->createElement("instruction");
 	    $xml_program->appendChild($xml_instrukce);
-	    $xml_instrukce->setAttribute("order", $token->poradi);
-	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    $xml_instrukce->setAttribute("order", $citac_oppcode++);
+	    $xml_instrukce->setAttribute("opcode", strtoupper($token->text));
 	    
 	    
              $token2->text = Get_token();
@@ -273,8 +274,8 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 	   
 	    $xml_instrukce = $xml->createElement("instruction");
 	    $xml_program->appendChild($xml_instrukce);
-	    $xml_instrukce->setAttribute("order", $token->poradi);
-	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    $xml_instrukce->setAttribute("order", $citac_oppcode++);
+	    $xml_instrukce->setAttribute("opcode", strtoupper($token->text));
 	    
 	    
              $token2->text = Get_token();
@@ -326,8 +327,8 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 	    
 	    $xml_instrukce = $xml->createElement("instruction");
 	    $xml_program->appendChild($xml_instrukce);
-	    $xml_instrukce->setAttribute("order", $token->poradi);
-	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    $xml_instrukce->setAttribute("order", $citac_oppcode++);
+	    $xml_instrukce->setAttribute("opcode", strtoupper($token->text));
 	    
              $token2->text = Get_token();
              $token2->poradi= $citac_poradi;
@@ -408,8 +409,8 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
 	    
 	    $xml_instrukce = $xml->createElement("instruction");
 	    $xml_program->appendChild($xml_instrukce);
-	    $xml_instrukce->setAttribute("order", $token->poradi);
-	    $xml_instrukce->setAttribute("opcode", $token->text);
+	    $xml_instrukce->setAttribute("order", $citac_oppcode++);
+	    $xml_instrukce->setAttribute("opcode", strtoupper($token->text));
 	    
              $token2->text = Get_token();
              $token2->poradi= $citac_poradi;
@@ -424,7 +425,7 @@ if(($IPPCODE_hlavicka->poradi == 1)&& ($IPPCODE_hlavicka->text == ".IPPcode18"))
                 exit(21); 
              }
 	     
-	    $xml_arg1 = $xml->createElement("arg1","$token2->text");
+	    $xml_arg1 = $xml->createElement("arg1",replace_chars($token2->text));
 	    $xml_arg1->setAttribute("type","label");
 	    $xml_instrukce->appendChild($xml_arg1);
 	     
